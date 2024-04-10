@@ -16,8 +16,8 @@ public class AuthenticationController {
 
 
     @GetMapping("/user/authentication-api")
-    public int AuthenticationCall(HttpServletRequest request, HttpServletResponse response){
-        Integer value = checkFilter.jwtCheckUser(request, response);
-        return value;
+    public String AuthenticationCall(HttpServletRequest request, HttpServletResponse response){
+        String user = checkFilter.jwtCheckUser(request, response);
+        return user;
     }
 }
