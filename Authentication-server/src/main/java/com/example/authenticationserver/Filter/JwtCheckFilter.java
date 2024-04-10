@@ -22,6 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.SignatureException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -33,7 +35,7 @@ public class JwtCheckFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
 
-    public Integer jwtCheckUser(HttpServletRequest request, HttpServletResponse response) {
+    public String jwtCheckUser(HttpServletRequest request, HttpServletResponse response) {
         String authorization = null;
 
         authorization = request.getHeader("Authorization");
@@ -43,15 +45,14 @@ public class JwtCheckFilter extends OncePerRequestFilter {
 
         String username = userJwtToken.get("username", String.class);
 
-        Optional<CommonEntity> byUsername = commonRepository.findByUsername(username);
 
-        if (byUsername.get().getProvider().equals("FormLogin")) {
-            return byUsername.get().getUserEntity().getUserId();
-        }
-        return 0;
+
+        return commonRepository.findByUsername(username)
+                .filter(commonEntity -> "FormLogin".equals(commonEntity.getProvider()))
+                .map(CommonEntity::getUsername)
+                .orElseThrow(() -> new NoSuchElementException("해당하는 사용자가 없습니다."));
+
     }
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = null;
@@ -97,7 +98,8 @@ public class JwtCheckFilter extends OncePerRequestFilter {
             log.info("Stack Trace = {}", e.getMessage());
 
             if (e instanceof io.jsonwebtoken.security.SignatureException) {
-
+                log.error("SignatureException: 토큰 서명 검증에 실패했습니다.", e);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 일치하지 않습니다.");
             }
         }
     }
