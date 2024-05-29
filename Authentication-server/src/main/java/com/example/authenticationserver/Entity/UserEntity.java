@@ -12,13 +12,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "user_table")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     private String nickName;
-    private String username;
+    private String userName;
     private String password;
     private String role;
     private String provider;
@@ -30,7 +31,7 @@ public class UserEntity {
     @Builder
     public UserEntity(String nickName, String username, String password, String role, String provider, String email,String userIp) {
         this.nickName = nickName;
-        this.username = username;
+        this.userName = username;
         this.password = password;
         this.role = role;
         this.provider = provider;

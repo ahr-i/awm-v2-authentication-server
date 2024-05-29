@@ -41,7 +41,7 @@ public class UserCheckFilter extends UsernamePasswordAuthenticationFilter {
         try {
             UserEntity userEntity = objectMapper.readValue(request.getInputStream(), UserEntity.class);
 
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userEntity.getUsername()
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userEntity.getUserName()
                     ,userEntity.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
 
             return authenticationManager.authenticate(token);
