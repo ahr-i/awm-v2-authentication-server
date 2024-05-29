@@ -21,7 +21,7 @@ public class JsonWebToken {
 
         Claims claims = Jwts.claims();
         UserEntity userEntity = byUsername.get();
-        claims.put("username",userEntity.getUsername());
+        claims.put("username",userEntity.getUserName());
         claims.put("provider",userEntity.getProvider());
         claims.put("role",userEntity.getRole());
 

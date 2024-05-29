@@ -49,7 +49,7 @@ public class JwtCheckFilter extends OncePerRequestFilter {
 
         return commonRepository.findByUsername(username)
                 .filter(commonEntity -> "FormLogin".equals(commonEntity.getProvider()))
-                .map(CommonEntity::getUsername)
+                .map(CommonEntity::getUserName)
                 .orElseThrow(() -> new NoSuchElementException("해당하는 사용자가 없습니다."));
 
     }
