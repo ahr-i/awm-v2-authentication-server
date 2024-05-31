@@ -12,7 +12,7 @@ public class Setting {
     private final String  serviceName;
 
     public Setting() {
-        monitor = "http://localhost:5080/service/register";
+        monitor = "http://127.0.0.1:9080/service/register";
         serverPort = "9001";
         serviceName = "authentication_server";
     }
